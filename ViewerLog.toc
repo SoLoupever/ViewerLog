@@ -1,0 +1,48 @@
+## Interface: 120100
+## Title: ViewerLog
+## Notes: Gestionnaire d'inventaire multi-personnages avec infobulles enrichies
+## Author: SoLoup_ever
+## Version: 1.0.0
+## IconTexture: Interface\AddOns\ViewerLog/logo_vl.blp
+## SavedVariables: ViewerLogDB
+## X-Wago-ID:BKpEEyGE
+
+## ── LIBS (en premier : toute la suite en dépend) ──────────────────
+libs\LibStub\LibStub.lua
+libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
+
+## ── LOCALISATION ─────────────────────────────────────────────────
+locales\Locales_frFR.lua
+locales\Locales_enUS.lua
+
+## ── NOYAU ─────────────────────────────────────────────────────────
+core\Init.lua
+core\Events.lua
+
+## ── SCANNERS ──────────────────────────────────────────────────────
+scanner\Container.lua
+scanner\Index.lua
+scanner\Character.lua
+scanner\Bags.lua
+scanner\Bank.lua
+scanner\WarbandBank.lua
+scanner\Mail.lua
+
+## ── API ───────────────────────────────────────────────────────────
+api\API.lua
+
+## ── UI / PARAMÈTRES ───────────────────────────────────────────────
+ui\ScrollBarSkin.lua
+ui\Widgets.lua
+ui\PanelResize.lua
+ui\DiscordButton.lua
+ui\TooltipPreview.lua
+ui\Dependencies.lua
+ui\Popups.lua
+ui\CharacterList.lua
+ui\GuildList.lua
+ui\Panel.lua
+ui\Minimap.lua
+
+## L'infobulle d'objet est désormais un addon séparé : ViewerLog_Tooltip
+## (activable/désactivable dans la section Dépendances du panneau).

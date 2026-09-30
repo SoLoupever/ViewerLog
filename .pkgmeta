@@ -1,0 +1,18 @@
+package-as: ViewerLog
+
+move-folders:
+  ViewerLog/ViewerLog_Guild: ViewerLog_Guild
+  ViewerLog/ViewerLog_Housing: ViewerLog_Housing
+  ViewerLog/ViewerLog_Monnaie: ViewerLog_Monnaie
+  ViewerLog/ViewerLog_Professions: ViewerLog_Professions
+  ViewerLog/ViewerLog_Recette: ViewerLog_Recette
+  ViewerLog/ViewerLog_Reminder: ViewerLog_Reminder
+  ViewerLog/ViewerLog_Reput: ViewerLog_Reput
+  ViewerLog/ViewerLog_Tooltip: ViewerLog_Tooltip
+
+ignore:
+  - .github
+  - .gitignore
+  - .gitattributes
+  - README
+  - README.md

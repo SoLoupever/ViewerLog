@@ -1,0 +1,147 @@
+## Interface: 120100
+## Title: ViewerLog |cffcc88ffHousing|r
+## Notes: Recettes de decoration housing .
+## Author: SoLoup_ever
+## Version: 1.0.0
+## RequiredDeps: ViewerLog, AltViewerLog_Professions
+## IconTexture: Interface\AddOns\ViewerLog\logo_vl.blp
+
+## Category-enUS: Inventory
+## Category-deDE: Inventar
+## Category-esES: Inventario
+## Category-esMX: Inventario
+## Category-frFR: Inventaire
+## Category-itIT: Inventario
+## Category-koKR: 소지품
+## Category-ptBR: Inventário
+## Category-ruRU: Предметы
+## Category-zhCN: 物品栏
+## Category-zhTW: 物品欄
+
+## -- LOCALISATION ---------------------------------------------------
+locales\Locales_frFR.lua
+locales\Locales_enUS.lua
+
+## -- DONNEES --------------------------------------------------------
+## Un dossier par metier, un fichier par extension dedans -- meme
+## convention que HomeDecor_Data_Professions.
+data\Constants.lua
+data\professions\Alchimie\Classic.lua
+data\professions\Alchimie\BurningCrusade.lua
+data\professions\Alchimie\WrathOfTheLichKing.lua
+data\professions\Alchimie\Cataclysm.lua
+data\professions\Alchimie\MistsOfPandaria.lua
+data\professions\Alchimie\WarlordsOfDraenor.lua
+data\professions\Alchimie\Legion.lua
+data\professions\Alchimie\BattleForAzeroth.lua
+data\professions\Alchimie\Shadowlands.lua
+data\professions\Alchimie\DragonIsles.lua
+data\professions\Alchimie\KhazAlgar.lua
+data\professions\Alchimie\Midnight.lua
+data\professions\Calligraphie\Classic.lua
+data\professions\Calligraphie\BurningCrusade.lua
+data\professions\Calligraphie\WrathOfTheLichKing.lua
+data\professions\Calligraphie\Cataclysm.lua
+data\professions\Calligraphie\MistsOfPandaria.lua
+data\professions\Calligraphie\WarlordsOfDraenor.lua
+data\professions\Calligraphie\Legion.lua
+data\professions\Calligraphie\BattleForAzeroth.lua
+data\professions\Calligraphie\Shadowlands.lua
+data\professions\Calligraphie\DragonIsles.lua
+data\professions\Calligraphie\KhazAlgar.lua
+data\professions\Calligraphie\Midnight.lua
+data\professions\Couture\Classic.lua
+data\professions\Couture\BurningCrusade.lua
+data\professions\Couture\WrathOfTheLichKing.lua
+data\professions\Couture\Cataclysm.lua
+data\professions\Couture\MistsOfPandaria.lua
+data\professions\Couture\WarlordsOfDraenor.lua
+data\professions\Couture\Legion.lua
+data\professions\Couture\BattleForAzeroth.lua
+data\professions\Couture\Shadowlands.lua
+data\professions\Couture\DragonIsles.lua
+data\professions\Couture\KhazAlgar.lua
+data\professions\Couture\Midnight.lua
+data\professions\Cuisine\MistsOfPandaria.lua
+data\professions\Cuisine\WarlordsOfDraenor.lua
+data\professions\Cuisine\BattleForAzeroth.lua
+data\professions\Cuisine\Shadowlands.lua
+data\professions\Cuisine\DragonIsles.lua
+data\professions\Cuisine\KhazAlgar.lua
+data\professions\Enchantement\Classic.lua
+data\professions\Enchantement\BurningCrusade.lua
+data\professions\Enchantement\WrathOfTheLichKing.lua
+data\professions\Enchantement\Cataclysm.lua
+data\professions\Enchantement\MistsOfPandaria.lua
+data\professions\Enchantement\WarlordsOfDraenor.lua
+data\professions\Enchantement\Legion.lua
+data\professions\Enchantement\BattleForAzeroth.lua
+data\professions\Enchantement\Shadowlands.lua
+data\professions\Enchantement\DragonIsles.lua
+data\professions\Enchantement\KhazAlgar.lua
+data\professions\Enchantement\Midnight.lua
+data\professions\Forge\Classic.lua
+data\professions\Forge\BurningCrusade.lua
+data\professions\Forge\WrathOfTheLichKing.lua
+data\professions\Forge\Cataclysm.lua
+data\professions\Forge\MistsOfPandaria.lua
+data\professions\Forge\WarlordsOfDraenor.lua
+data\professions\Forge\Legion.lua
+data\professions\Forge\BattleForAzeroth.lua
+data\professions\Forge\Shadowlands.lua
+data\professions\Forge\DragonIsles.lua
+data\professions\Forge\KhazAlgar.lua
+data\professions\Forge\Midnight.lua
+data\professions\Ingenierie\Classic.lua
+data\professions\Ingenierie\BurningCrusade.lua
+data\professions\Ingenierie\WrathOfTheLichKing.lua
+data\professions\Ingenierie\Cataclysm.lua
+data\professions\Ingenierie\MistsOfPandaria.lua
+data\professions\Ingenierie\WarlordsOfDraenor.lua
+data\professions\Ingenierie\Legion.lua
+data\professions\Ingenierie\BattleForAzeroth.lua
+data\professions\Ingenierie\Shadowlands.lua
+data\professions\Ingenierie\DragonIsles.lua
+data\professions\Ingenierie\KhazAlgar.lua
+data\professions\Ingenierie\Midnight.lua
+data\professions\Joaillerie\Classic.lua
+data\professions\Joaillerie\BurningCrusade.lua
+data\professions\Joaillerie\WrathOfTheLichKing.lua
+data\professions\Joaillerie\Cataclysm.lua
+data\professions\Joaillerie\MistsOfPandaria.lua
+data\professions\Joaillerie\WarlordsOfDraenor.lua
+data\professions\Joaillerie\Legion.lua
+data\professions\Joaillerie\BattleForAzeroth.lua
+data\professions\Joaillerie\Shadowlands.lua
+data\professions\Joaillerie\DragonIsles.lua
+data\professions\Joaillerie\KhazAlgar.lua
+data\professions\Joaillerie\Midnight.lua
+data\professions\TravailDuCuir\Classic.lua
+data\professions\TravailDuCuir\BurningCrusade.lua
+data\professions\TravailDuCuir\WrathOfTheLichKing.lua
+data\professions\TravailDuCuir\Cataclysm.lua
+data\professions\TravailDuCuir\MistsOfPandaria.lua
+data\professions\TravailDuCuir\WarlordsOfDraenor.lua
+data\professions\TravailDuCuir\Legion.lua
+data\professions\TravailDuCuir\BattleForAzeroth.lua
+data\professions\TravailDuCuir\Shadowlands.lua
+data\professions\TravailDuCuir\DragonIsles.lua
+data\professions\TravailDuCuir\KhazAlgar.lua
+data\professions\TravailDuCuir\Midnight.lua
+
+## -- SCANNER --------------------------------------------------------
+## HousingCatalog avant Detect : la decouverte auto alimente la detection.
+scanner\HousingCatalog.lua
+scanner\Detect.lua
+
+## -- APERCU 3D (expose via l'API) ----------------------------------
+ui\ModelViewer.lua
+
+## -- API PUBLIQUE (expose GetHousingRecipes a AltViewerLog_Professions) --
+api\API.lua
+
+## -- PARAMETRES ----------------------------------------------------
+ui\Settings.lua
+
+## -- INIT -- Charge en dernier -------------------------------------
+Init.lua
