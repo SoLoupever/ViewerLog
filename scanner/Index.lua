@@ -5,7 +5,7 @@ local addonName, ns = ...
 -- moment où la tooltip le demande (GetTooltipEntry). O(1) par scan.
 --
 -- ns.tooltipIndex[itemID] = {
---   chars        = { ["Nom@Realm"] = { char, realm, class, faction, bagCount, bankCount, mailCount } },
+--   chars        = { ["Nom@Realm"] = { char, realm, class, faction, bagCount, bankCount, mailCount, auctionCount } },
 --   warbandCount = N,
 --   guildCount   = N,               -- total toutes guildes
 --   guilds       = { [name] = N },  -- compte par guilde
@@ -37,8 +37,37 @@ end
 
 -- ── Rebuild partiel ───────────────────────────────────────────────
 
--- Indexe un conteneur (sacs ou banque) d'un perso. Définie une fois
--- (pas de closure recréée par perso à chaque rebuild).
+-- Entrée index d'un objet (créée au besoin).
+local function GetEntry(idx, id)
+    local entry = idx[id]
+    if not entry then
+        entry = { chars = {}, warbandCount = 0, guildCount = 0 }
+        idx[id] = entry
+    end
+    return entry
+end
+
+-- Entrée perso d'un objet (créée au besoin).
+local function GetCharEntry(idx, id, key, charName, realmName, data)
+    local entry = GetEntry(idx, id)
+    local ce = entry.chars[key]
+    if not ce then
+        ce = {
+            char         = charName,
+            realm        = realmName,
+            class        = data.class,
+            faction      = data.faction,
+            bagCount     = 0,
+            bankCount    = 0,
+            mailCount    = 0,
+            auctionCount = 0,
+        }
+        entry.chars[key] = ce
+    end
+    return ce
+end
+
+-- Indexe un conteneur (sacs ou banque) d'un perso.
 local function IndexContainer(idx, slots, field, key, charName, realmName, data)
     if not slots then return end
     for _, slotData in pairs(slots) do
@@ -47,24 +76,7 @@ local function IndexContainer(idx, slots, field, key, charName, realmName, data)
                 local id    = type(item) == "table" and item.id    or item
                 local count = type(item) == "table" and item.count or 1
                 if id then
-                    local entry = idx[id]
-                    if not entry then
-                        entry = { chars = {}, warbandCount = 0, guildCount = 0 }
-                        idx[id] = entry
-                    end
-                    local ce = entry.chars[key]
-                    if not ce then
-                        ce = {
-                            char      = charName,
-                            realm     = realmName,
-                            class     = data.class,
-                            faction   = data.faction,
-                            bagCount  = 0,
-                            bankCount = 0,
-                            mailCount = 0,
-                        }
-                        entry.chars[key] = ce
-                    end
+                    local ce = GetCharEntry(idx, id, key, charName, realmName, data)
                     ce[field] = ce[field] + count
                 end
             end
@@ -79,26 +91,18 @@ local function IndexMail(idx, mail, key, charName, realmName, data)
         local id    = item.id
         local count = item.count or 1
         if id then
-            local entry = idx[id]
-            if not entry then
-                entry = { chars = {}, warbandCount = 0, guildCount = 0 }
-                idx[id] = entry
-            end
-            local ce = entry.chars[key]
-            if not ce then
-                ce = {
-                    char      = charName,
-                    realm     = realmName,
-                    class     = data.class,
-                    faction   = data.faction,
-                    bagCount  = 0,
-                    bankCount = 0,
-                    mailCount = 0,
-                }
-                entry.chars[key] = ce
-            end
+            local ce = GetCharEntry(idx, id, key, charName, realmName, data)
             ce.mailCount = ce.mailCount + count
         end
+    end
+end
+
+-- Indexe les enchères ({ [itemID] = quantité }) d'un perso.
+local function IndexAuctions(idx, auctions, key, charName, realmName, data)
+    if not auctions then return end
+    for id, count in pairs(auctions) do
+        local ce = GetCharEntry(idx, id, key, charName, realmName, data)
+        ce.auctionCount = ce.auctionCount + count
     end
 end
 
@@ -116,6 +120,7 @@ local function RebuildChars(idx)
                     IndexContainer(idx, data.bags, "bagCount",  key, charName, realmName, data)
                     IndexContainer(idx, data.bank, "bankCount", key, charName, realmName, data)
                     IndexMail(idx, data.mail, key, charName, realmName, data)
+                    IndexAuctions(idx, data.auctions, key, charName, realmName, data)
                 end
             end
         end
@@ -134,11 +139,7 @@ local function RebuildWarband(idx)
                     local id    = type(item) == "table" and item.id    or item
                     local count = type(item) == "table" and item.count or 1
                     if id then
-                        local entry = idx[id]
-                        if not entry then
-                            entry = { chars = {}, warbandCount = 0, guildCount = 0 }
-                            idx[id] = entry
-                        end
+                        local entry = GetEntry(idx, id)
                         entry.warbandCount = entry.warbandCount + count
                     end
                 end
@@ -161,11 +162,7 @@ local function RebuildGuild(idx)
                     if tab and tab.items then
                         for _, item in pairs(tab.items) do
                             if item and item.id then
-                                local entry = idx[item.id]
-                                if not entry then
-                                    entry = { chars = {}, warbandCount = 0, guildCount = 0 }
-                                    idx[item.id] = entry
-                                end
+                                local entry = GetEntry(idx, item.id)
                                 entry.guildCount = entry.guildCount + (item.count or 1)
                                 -- Compte par guilde (et non un total global répété par ligne).
                                 entry.guilds = entry.guilds or {}

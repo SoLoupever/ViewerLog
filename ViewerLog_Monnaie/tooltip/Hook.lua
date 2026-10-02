@@ -2,7 +2,7 @@ local addonName, ns = ...
 
 -- Infobulle monnaies : hook sur Enum.TooltipDataType.Currency (indépendant
 -- du hook Item du core, aucune collision). Réutilise les réglages partagés
--- ViewerLogDB.settings (pas de préférences parallèles). Style calqué sur
+-- réglages ViewerLogAPI.GetSetting (pas de préférences parallèles). Style calqué sur
 -- core/tooltip/Hook.lua pour rester cohérent.
 
 local ICON = {
@@ -28,15 +28,14 @@ end
 -- ── Injection dans l'infobulle ────────────────────────────────────
 
 local function AppendCurrencyInfo(tooltip, currencyID)
-    local s = ViewerLogDB and ViewerLogDB.settings or {}
-    if s.hideTooltip or s.disableTooltip         then return end
-    if s.tooltipOnShift and not IsShiftKeyDown() then return end
-
     local vlAPI = _G.ViewerLogAPI
-    if not vlAPI or not vlAPI.GetAllCharacters or not vlAPI.GetCharacterByKey then return end
+    if not vlAPI or not vlAPI.GetSetting or not vlAPI.GetAllCharacters or not vlAPI.GetCharacterByKey then return end
 
-    local showIcons = not s.hideTooltipIcons
-    local showRealm = not s.hideRealmTooltip
+    if vlAPI.GetSetting("hideTooltip") or vlAPI.GetSetting("disableTooltip") then return end
+    if vlAPI.GetSetting("tooltipOnShift") and not IsShiftKeyDown() then return end
+
+    local showIcons = not vlAPI.GetSetting("hideTooltipIcons")
+    local showRealm = not vlAPI.GetSetting("hideRealmTooltip")
 
     local rows, total = {}, 0
 
@@ -86,7 +85,8 @@ end
 -- Si disableTooltip est actif au chargement, le hook n'est pas enregistré
 -- (réactivation → /reload). Même gate que core/tooltip/Hook.lua.
 
-local disabled = ViewerLogDB and ViewerLogDB.settings and ViewerLogDB.settings.disableTooltip
+local vlAPI = _G.ViewerLogAPI
+local disabled = not vlAPI or not vlAPI.GetSetting or vlAPI.GetSetting("disableTooltip")
 
 if not disabled then
     if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall and Enum.TooltipDataType and Enum.TooltipDataType.Currency then

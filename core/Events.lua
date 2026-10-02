@@ -34,6 +34,11 @@ frame:RegisterEvent("PLAYER_INTERACTION_MANAGER_FRAME_HIDE")
 frame:RegisterEvent("MAIL_SHOW")               -- ouverture boîte aux lettres
 frame:RegisterEvent("MAIL_INBOX_UPDATE")       -- contenu du courrier reçu/à jour
 frame:RegisterEvent("MAIL_CLOSED")
+frame:RegisterEvent("AUCTION_HOUSE_SHOW")                  -- ouverture HV
+frame:RegisterEvent("AUCTION_HOUSE_CLOSED")
+frame:RegisterEvent("OWNED_AUCTIONS_UPDATED")            -- liste de mes enchères reçue/à jour
+frame:RegisterEvent("AUCTION_CANCELED")
+frame:RegisterEvent("AUCTION_HOUSE_AUCTION_CREATED")
 
 -- ── Debounce ScanCharacterMeta ────────────────────────────────────
 -- Les events XP/repos arrivent en rafale : un seul appel 0.5s après le dernier.
@@ -56,6 +61,8 @@ local _warbandBankOpen = false
 -- hors boîte, indiscernable d'un courrier vide ; _mailOpen sert donc de
 -- seule garde (scan écrit charData.mail y compris vide → nettoyage correct).
 local _mailOpen        = false
+-- Enchères : lisibles uniquement HV ouvert (même logique que le courrier).
+local _auctionOpen     = false
 
 frame:SetScript("OnEvent", function(self, event, ...)
 
@@ -237,5 +244,25 @@ frame:SetScript("OnEvent", function(self, event, ...)
 
     elseif event == "MAIL_CLOSED" then
         _mailOpen = false
+
+    -- ── Enchères ──────────────────────────────────────────────
+    -- AUCTION_HOUSE_SHOW : on demande la liste ; OWNED_AUCTIONS_UPDATED
+    -- la livre (debouncé par le scanner). Mise en vente / annulation :
+    -- nouvelle demande.
+    elseif event == "AUCTION_HOUSE_SHOW" then
+        _auctionOpen = true
+        ns.QueryAuctions()
+
+    elseif event == "AUCTION_HOUSE_CLOSED" then
+        _auctionOpen = false
+
+    elseif event == "OWNED_AUCTIONS_UPDATED" then
+        if _auctionOpen and not ns._isLoggingOut then
+            ns.ScanAuctions()
+        end
+
+    elseif event == "AUCTION_CANCELED"
+        or event == "AUCTION_HOUSE_AUCTION_CREATED" then
+        if _auctionOpen then ns.QueryAuctions() end
     end
 end)

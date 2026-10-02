@@ -9,8 +9,8 @@ local LOCALES = {
     enUS = { BEST_CHAR = "Most advanced:", CHAR = "%s (%s)" },
 }
 local function T()
-    local lang = (ViewerLogDB and ViewerLogDB.settings and ViewerLogDB.settings.lang)
-                 or GetLocale()
+    local api  = _G.ViewerLogAPI
+    local lang = (api and api.GetSetting and api.GetSetting("lang")) or GetLocale()
     return LOCALES[lang] or LOCALES.enUS
 end
 

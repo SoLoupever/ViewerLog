@@ -9,6 +9,7 @@ ns.locales["frFR"] = {
     TT_BAG      = "Sac",
     TT_BANK     = "Banque",
     TT_MAIL     = "Courrier",
+    TT_AUCTION  = "Enchères",
     TT_WARBAND  = "Bataillon",
     TT_GUILD    = "Guilde",
     TT_TOTAL    = "Total",

@@ -7,6 +7,7 @@ ns.locales["enUS"] = {
     TT_BAG      = "Bag",
     TT_BANK     = "Bank",
     TT_MAIL     = "Mail",
+    TT_AUCTION  = "Auction",
     TT_WARBAND  = "Warband",
     TT_GUILD    = "Guild",
     TT_TOTAL    = "Total",

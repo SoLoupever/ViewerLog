@@ -4,8 +4,8 @@ local addonName, ns = ...
 -- Addon séparé dépendant de ViewerLog : le désactiver (section Dépendances
 -- du panneau, ou liste d'addons) coupe entièrement le hook, sans /reload
 -- côté cœur. Lit l'index de possession via l'API publique _G.ViewerLogAPI
--- (pas d'accès au ns interne de ViewerLog) et ViewerLogDB.settings pour les
--- options d'affichage (icônes / guilde / bataillon / royaume).
+-- (pas d'accès au ns interne de ViewerLog), y compris pour les options
+-- d'affichage (icônes / guilde / bataillon / royaume) via GetSetting.
 
 local VL = _G.ViewerLogAPI
 if not VL then return end   -- ViewerLog absent : rien à injecter.
@@ -41,27 +41,27 @@ end
 local function AppendInfo(tooltip, itemID)
     if not itemID then return end
 
-    local s = ViewerLogDB and ViewerLogDB.settings or {}
     -- Désactivation "douce" via la case du menu ViewerLog (addon reste chargé).
-    if s.disableTooltip then return end
-    if s.tooltipOnShift and not IsShiftKeyDown() then return end
+    if VL.GetSetting("disableTooltip") then return end
+    if VL.GetSetting("tooltipOnShift") and not IsShiftKeyDown() then return end
 
     local entry = VL.GetTooltipEntry(itemID)
     if not entry then return end
 
-    local showIcons  = not s.hideTooltipIcons
-    local showGuild  = not s.hideGuildTooltip
-    local showRealm  = not s.hideRealmTooltip
+    local showIcons  = not VL.GetSetting("hideTooltipIcons")
+    local showGuild  = not VL.GetSetting("hideGuildTooltip")
+    local showRealm  = not VL.GetSetting("hideRealmTooltip")
+    local showWarband = not VL.GetSetting("hideWarbandTooltip")
 
     local hasChars   = next(entry.chars)       ~= nil
-    local hasWarband = (entry.warbandCount     or 0) > 0 and not s.hideWarbandTooltip
+    local hasWarband = (entry.warbandCount     or 0) > 0 and showWarband
     local hasGuild   = (entry.guildCount       or 0) > 0 and showGuild
     if not hasChars and not hasWarband and not hasGuild then return end
 
     -- Total pré-calculé (affiché dans l'en-tête "Owned by").
     local preTotal = 0
     for _, ce in pairs(entry.chars) do
-        preTotal = preTotal + (ce.bagCount or 0) + (ce.bankCount or 0) + (ce.mailCount or 0)
+        preTotal = preTotal + (ce.bagCount or 0) + (ce.bankCount or 0) + (ce.mailCount or 0) + (ce.auctionCount or 0)
     end
     if hasWarband then preTotal = preTotal + entry.warbandCount end
     if hasGuild   then preTotal = preTotal + entry.guildCount   end
@@ -76,7 +76,7 @@ local function AppendInfo(tooltip, itemID)
 
     -- ── Personnages ───────────────────────────────────────────
     for _, ce in pairs(entry.chars) do
-        local total = (ce.bagCount or 0) + (ce.bankCount or 0) + (ce.mailCount or 0)
+        local total = (ce.bagCount or 0) + (ce.bankCount or 0) + (ce.mailCount or 0) + (ce.auctionCount or 0)
         if total > 0 then
             grandTotal = grandTotal + total
             local hex  = GetClassHex(ce.class or "WARRIOR")
@@ -105,6 +105,9 @@ local function AppendInfo(tooltip, itemID)
             end
             if (ce.mailCount or 0) > 0 then
                 parts[#parts+1] = string.format("|cffffffff%d :|r |cffa335ee%s|r", ce.mailCount, L("TT_MAIL"))
+            end
+            if (ce.auctionCount or 0) > 0 then
+                parts[#parts+1] = string.format("|cffffffff%d :|r |cffa335ee%s|r", ce.auctionCount, L("TT_AUCTION"))
             end
 
             tooltip:AddDoubleLine(left, table.concat(parts, "  |cff444444·|r  "),
@@ -137,7 +140,7 @@ end
 
 -- ── Enregistrement du hook ────────────────────────────────────────
 -- Toujours enregistré tant que l'addon est chargé. Deux niveaux d'arrêt :
--- masquage doux via ViewerLogDB.settings.disableTooltip (testé dans AppendInfo),
+-- masquage doux via le réglage disableTooltip (testé dans AppendInfo),
 -- ou déchargement complet en désactivant l'addon (section Dépendances).
 
 if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall then

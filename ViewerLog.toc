@@ -5,6 +5,7 @@
 ## Version: 1.0.0
 ## IconTexture: Interface\AddOns\ViewerLog/logo_vl.blp
 ## SavedVariables: ViewerLogDB
+## X-Curse-Project-ID:1566052
 ## X-Wago-ID:BKpEEyGE
 
 ## ── LIBS (en premier : toute la suite en dépend) ──────────────────
@@ -27,6 +28,7 @@ scanner\Bags.lua
 scanner\Bank.lua
 scanner\WarbandBank.lua
 scanner\Mail.lua
+scanner\Auctions.lua
 
 ## ── API ───────────────────────────────────────────────────────────
 api\API.lua
