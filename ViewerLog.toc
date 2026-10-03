@@ -34,12 +34,19 @@ scanner\Auctions.lua
 api\API.lua
 
 ## ── UI / PARAMÈTRES ───────────────────────────────────────────────
+ui\Theme.lua
+ui\themes\Hybrid.lua
+ui\themes\Blizzard.lua
 ui\ScrollBarSkin.lua
 ui\Widgets.lua
 ui\PanelResize.lua
+ui\Tabs.lua
 ui\DiscordButton.lua
 ui\TooltipPreview.lua
+ui\TooltipSection.lua
+ui\RemindersSection.lua
 ui\Dependencies.lua
+ui\ThemePage.lua
 ui\Popups.lua
 ui\CharacterList.lua
 ui\GuildList.lua

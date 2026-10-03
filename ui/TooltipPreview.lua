@@ -1,17 +1,16 @@
 local addonName, ns = ...
 
--- Aperçu infobulle en temps réel, affiché dans le panneau de paramètres.
+-- Aperçu infobulle en temps réel. Ancré TOPRIGHT sous le coin bas-droit de `anchor`.
 
 ns.UI = ns.UI or {}
 
 function ns.UI.BuildTooltipPreview(parent, anchor, ax, ay, aw, ah)
-    local C = ns.UI.Colors
-    local frame = ns.UI.StyledFrame(parent, aw, ah)
-    frame:SetPoint("TOPLEFT", anchor, "TOPLEFT", ax, ay)
+    local frame = ns.UI.StyledFrame(parent, aw, ah, "preview")
+    frame:SetPoint("TOPRIGHT", anchor, "BOTTOMRIGHT", ax, ay)
 
     local hdr = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     hdr:SetPoint("TOPLEFT", 8, -6)
-    hdr:SetTextColor(C.accent[1] + 0.2, C.accent[2] + 0.2, C.accent[3] + 0.1)
+    ns.UI.Tint(hdr, "previewHdr")
     hdr:SetText(ns.L("TT_PREVIEW_HEADER"))
 
     local owned = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")

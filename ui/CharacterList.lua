@@ -1,29 +1,76 @@
 local addonName, ns = ...
 
--- Liste des personnages enregistrés (colonne gauche du panneau),
--- avec suppression individuelle.
+-- Liste des personnages enregistrés (suppression individuelle).
+-- Lignes réutilisées entre deux Populate (pas de recréation de frames).
 
 ns.UI = ns.UI or {}
 
 local ROW_H = 22
 
-function ns.UI.BuildCharacterList(panel, anchorAbove, panelWidth, colWidth, bottomMargin)
-    local C = ns.UI.Colors
+local function ClassColorStr(class)
+    local col = RAID_CLASS_COLORS and RAID_CLASS_COLORS[class and string.upper(class) or ""]
+    if col and col.colorStr then return col.colorStr end
+    if col then
+        return string.format("ff%02x%02x%02x",
+            math.floor((col.r or 0.8) * 255),
+            math.floor((col.g or 0.8) * 255),
+            math.floor((col.b or 0.8) * 255))
+    end
+    return "ffcccccc"
+end
 
-    local secChars = panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    secChars:SetPoint("TOPLEFT", anchorAbove, "BOTTOMLEFT", 0, -22)
-    secChars:SetText(ns.L("SECTION_CHARACTERS"))
-    secChars:SetTextColor(C.accent[1] + 0.15, C.accent[2] + 0.15, C.accent[3] + 0.05)
-    ns.UI.HSep(panel, secChars, -2, -(panelWidth - colWidth + 4))
+-- block : conteneur ; colWidth : largeur de la colonne gauche.
+function ns.UI.BuildCharacterList(block, colWidth)
+    local sec = ns.UI.SectionTitle(block, ns.L("SECTION_CHARACTERS"), block, "TOPLEFT", 16, -18)
 
-    local charBg, _, charChild = ns.UI.MakeScrollBox(panel, 8, -20, colWidth - 4, 330)
+    local charBg, _, child = ns.UI.MakeScrollBox(block, 0, 0, nil, nil)
     charBg:ClearAllPoints()
-    charBg:SetPoint("TOPLEFT",     secChars, "BOTTOMLEFT", -2, -6)
-    charBg:SetPoint("BOTTOMRIGHT", panel,    "BOTTOMLEFT", colWidth + 4, bottomMargin)
+    charBg:SetPoint("TOPLEFT",     sec,   "BOTTOMLEFT", -6, -6)
+    charBg:SetPoint("BOTTOMRIGHT", block, "BOTTOMLEFT", colWidth, 0)
 
-    local function PopulateChars()
-        for _, c in ipairs({charChild:GetChildren()}) do c:Hide() end
+    local pool = {}
 
+    local empty = child:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    empty:SetPoint("TOPLEFT", 4, -4)
+    ns.UI.Tint(empty, "textDisabled")
+    empty:SetText(ns.L("NO_CHAR_REGISTERED"))
+
+    local function GetRow(i)
+        local r = pool[i]
+        if r then return r end
+
+        r = CreateFrame("Frame", nil, child)
+        r:SetHeight(ROW_H)
+        r:SetPoint("TOPLEFT",  child, "TOPLEFT",  0, -(i - 1) * ROW_H)
+        r:SetPoint("TOPRIGHT", child, "TOPRIGHT", -4, -(i - 1) * ROW_H)
+
+        r.fx = r:CreateTexture(nil, "OVERLAY")
+        r.fx:SetSize(14, 14)
+        r.fx:SetPoint("LEFT", 2, 0)
+
+        r.nm = r:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        r.nm:SetPoint("LEFT",  r, "LEFT",  20,  0)
+        r.nm:SetPoint("RIGHT", r, "RIGHT", -82, 0)
+        r.nm:SetJustifyH("LEFT")
+
+        r.del = ns.UI.DeleteBtn(r, function()
+            StaticPopup_Show("VL_DEL_CHAR",
+                r.charName .. " (" .. r.realm .. ")", nil,
+                { char = r.charName, realm = r.realm })
+        end)
+        r.del:SetPoint("RIGHT", -2, 0)
+
+        r.sep = r:CreateTexture(nil, "BACKGROUND")
+        r.sep:SetHeight(1)
+        r.sep:SetPoint("BOTTOMLEFT",  r, "BOTTOMLEFT",  0, 0)
+        r.sep:SetPoint("BOTTOMRIGHT", r, "BOTTOMRIGHT", 0, 0)
+        ns.UI.Tint(r.sep, "rowSep")
+
+        pool[i] = r
+        return r
+    end
+
+    local function Populate()
         local rows = {}
         for realmName, realmData in pairs(ViewerLogDB) do
             if ns.IsRealm(realmName, realmData) then
@@ -39,72 +86,22 @@ function ns.UI.BuildCharacterList(panel, anchorAbove, panelWidth, colWidth, bott
             return a.char < b.char
         end)
 
-        local yOff = 0
-        for _, row in ipairs(rows) do
-            local charName, realmName, data = row.char, row.realm, row.data
-
-            local r = CreateFrame("Frame", nil, charChild)
-            r:SetSize(charChild:GetWidth() - 4, ROW_H)
-            r:SetPoint("TOPLEFT", 0, yOff)
-
-            -- Icône faction
-            local fx = r:CreateTexture(nil, "OVERLAY")
-            fx:SetSize(14, 14)
-            fx:SetPoint("LEFT", 2, 0)
-            fx:SetTexture(data.faction == "Horde"
+        for i, row in ipairs(rows) do
+            local r, data = GetRow(i), row.data
+            r.charName, r.realm = row.char, row.realm
+            r.fx:SetTexture(data.faction == "Horde"
                 and "Interface\\Icons\\PVPCurrency-Honor-Horde"
                 or  "Interface\\Icons\\PVPCurrency-Honor-Alliance")
-
-            -- Couleur de classe (colorStr = ex: "ff00f0ff" pour DEATHKNIGHT)
-            local classKey = data.class and string.upper(data.class) or ""
-            local col = (RAID_CLASS_COLORS and RAID_CLASS_COLORS[classKey])
-            local colorStr
-            if col and col.colorStr then
-                colorStr = col.colorStr
-            elseif col then
-                colorStr = string.format("ff%02x%02x%02x",
-                    math.floor((col.r or 0.8) * 255),
-                    math.floor((col.g or 0.8) * 255),
-                    math.floor((col.b or 0.8) * 255))
-            else
-                colorStr = "ffcccccc"
-            end
-
-            local nm = r:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-            nm:SetPoint("LEFT",  r, "LEFT",  20,  0)
-            nm:SetPoint("RIGHT", r, "RIGHT", -82, 0)
-            nm:SetJustifyH("LEFT")
-            nm:SetText(string.format("|c%s[%s]|r |c%s%s|r  |c%sLv%d|r",
-                colorStr, realmName, colorStr, charName, colorStr, data.level or 0))
-
-            -- Bouton ✕
-            local capChar, capRealm = charName, realmName
-            local del = ns.UI.DeleteBtn(r, function()
-                StaticPopup_Show("VL_DEL_CHAR",
-                    capChar .. " (" .. capRealm .. ")", nil,
-                    { char = capChar, realm = capRealm })
-            end)
-            del:SetPoint("RIGHT", -2, 0)
-
-            -- Séparateur
-            local sep = r:CreateTexture(nil, "BACKGROUND")
-            sep:SetHeight(1)
-            sep:SetPoint("BOTTOMLEFT",  r, "BOTTOMLEFT",  0, 0)
-            sep:SetPoint("BOTTOMRIGHT", r, "BOTTOMRIGHT", 0, 0)
-            sep:SetColorTexture(C.rowSep[1], C.rowSep[2], C.rowSep[3], C.rowSep[4])
-
-            yOff = yOff - ROW_H
+            local cs = ClassColorStr(data.class)
+            r.nm:SetText(string.format("|c%s[%s]|r |c%s%s|r  |c%sLv%d|r",
+                cs, row.realm, cs, row.char, cs, data.level or 0))
+            r:Show()
         end
-        charChild:SetHeight(math.max(1, -yOff))
+        for i = #rows + 1, #pool do pool[i]:Hide() end
 
-        if #rows == 0 then
-            local e = charChild:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-            e:SetPoint("TOPLEFT", 4, -4)
-            e:SetTextColor(0.4, 0.4, 0.4)
-            e:SetText(ns.L("NO_CHAR_REGISTERED"))
-            charChild:SetHeight(30)
-        end
+        empty:SetShown(#rows == 0)
+        child:SetHeight(math.max(#rows > 0 and #rows * ROW_H or 30, 1))
     end
 
-    return { Populate = PopulateChars }
+    return { Populate = Populate }
 end

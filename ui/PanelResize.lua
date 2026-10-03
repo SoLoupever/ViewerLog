@@ -1,31 +1,17 @@
 local addonName, ns = ...
 
 -- Poignée de redimensionnement du panneau de paramètres (bas-droite).
--- Même mécanisme visuel que AltViewerLog/ui/MainFrame.lua (grabber
--- Blizzard), appliqué ici au panneau ViewerLog. La taille choisie est
--- persistée dans ViewerLogDB.settings, le même registre déjà utilisé
--- par tout le panneau (cf. Panel.lua) — pas de stockage parallèle.
---
--- Le panneau ViewerLog n'a pas de fond texturé coûteux comme
--- AltViewerLog (juste un backdrop couleur unie) : pas besoin du
--- backdrop temporaire "resize" utilisé là-bas pour limiter le coût
--- de rendu pendant le geste.
+-- Taille calculée à la main depuis le delta curseur (pas de StartSizing) :
+-- bornes appliquées à chaque frame de drag, OnUpdate actif seulement
+-- pendant le geste. Taille persistée dans ViewerLogDB.settings.
 
 ns.UI = ns.UI or {}
 
 function ns.UI.MakeResizeGrip(panel, minW, minH, maxW, maxH, onResizeStop)
-    panel:SetResizable(true)
-    if panel.SetResizeBounds then
-        panel:SetResizeBounds(minW, minH, maxW, maxH)
-    else
-        panel:SetMinResize(minW, minH)
-        panel:SetMaxResize(maxW, maxH)
-    end
-
     local grip = CreateFrame("Frame", nil, panel)
     grip:SetSize(16, 16)
     grip:SetPoint("BOTTOMRIGHT", panel, "BOTTOMRIGHT", -2, 2)
-    grip:SetFrameLevel(panel:GetFrameLevel() + 10)
+    grip:SetFrameLevel(panel:GetFrameLevel() + 50)
     grip:EnableMouse(true)
 
     local tex = grip:CreateTexture(nil, "OVERLAY")
@@ -35,27 +21,42 @@ function ns.UI.MakeResizeGrip(panel, minW, minH, maxW, maxH, onResizeStop)
     hl:SetAllPoints()
     hl:SetTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
 
-    grip:SetScript("OnMouseDown", function(_, btn)
-        if btn ~= "LeftButton" then return end
-        -- Le panneau est ancré en TOPRIGHT (près du bouton minimap). Sans
-        -- renormaliser l'ancrage en TOPLEFT avant le redimensionnement,
-        -- une poignée en bas-à-droite ferait grandir le panneau vers la
-        -- gauche au lieu de vers le bas-droite (même idiome que
-        -- AltViewerLog/ui/MainFrame.lua pour son propre drag de fenêtre).
-        local x, y = panel:GetLeft(), panel:GetTop()
-        panel:ClearAllPoints()
-        panel:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", x, y)
-        panel:StartSizing("BOTTOMRIGHT")
-    end)
-    grip:SetScript("OnMouseUp", function(_, btn)
-        if btn ~= "LeftButton" then return end
-        panel:StopMovingOrSizing()
+    local startX, startY, startW, startH
 
+    local function OnUpdate()
+        local cx, cy = GetCursorPosition()
+        local s = panel:GetEffectiveScale()
+        local w = startW + (cx - startX) / s
+        local h = startH + (startY - cy) / s
+        panel:SetSize(math.max(minW, math.min(maxW, w)),
+                      math.max(minH, math.min(maxH, h)))
+    end
+
+    local function Stop()
+        grip:SetScript("OnUpdate", nil)
         ViewerLogDB.settings = ViewerLogDB.settings or {}
         ViewerLogDB.settings.panelWidth  = panel:GetWidth()
         ViewerLogDB.settings.panelHeight = panel:GetHeight()
-
         if onResizeStop then onResizeStop() end
+    end
+
+    grip:SetScript("OnMouseDown", function(_, btn)
+        if btn ~= "LeftButton" then return end
+        -- Ancrage TOPLEFT : le panneau grandit vers le bas-droite.
+        local x, y = panel:GetLeft(), panel:GetTop()
+        panel:ClearAllPoints()
+        panel:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", x, y)
+
+        startX, startY = GetCursorPosition()
+        startW, startH = panel:GetWidth(), panel:GetHeight()
+        grip:SetScript("OnUpdate", OnUpdate)
+    end)
+    grip:SetScript("OnMouseUp", function(_, btn)
+        if btn ~= "LeftButton" then return end
+        Stop()
+    end)
+    grip:SetScript("OnHide", function(s)
+        if s:GetScript("OnUpdate") then Stop() end
     end)
 
     panel.resizeGrip = grip

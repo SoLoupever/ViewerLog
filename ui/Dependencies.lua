@@ -1,9 +1,8 @@
 local addonName, ns = ...
 
--- Section "Dépendances" du panneau : active/désactive les addons
--- satellites de la suite ViewerLog (colonne gauche) et AltViewerLog
--- (colonne droite). Colonnes indépendantes, cf. commentaire des tables
--- ci-dessous pour la logique de cascade/symétrie.
+-- Onglet Modules : active/désactive les addons satellites ViewerLog
+-- (colonne gauche) et AltViewerLog (colonne droite). Cascade/symétrie
+-- décrites ci-dessous.
 
 ns.UI = ns.UI or {}
 
@@ -113,55 +112,36 @@ local function BuildAVLRow(parent, anchor, offX, offY, mod)
     return cb
 end
 
--- Construit la section complète (titre + cadre deux colonnes) sous
--- anchorAbove. Renvoie le cadre (pour ancrer la suite du panneau) et
--- une fonction Refresh à appeler à l'ouverture du panneau.
-function ns.UI.BuildDependenciesSection(panel, anchorAbove, panelWidth)
-    local C = ns.UI.Colors
-
-    local secDep = panel:CreateFontString(nil, "OVERLAY", "GameFontNormalLarge")
-    secDep:SetPoint("TOPLEFT", anchorAbove, "BOTTOMLEFT", 0, -22)
-    secDep:SetText(ns.L("SECTION_DEPENDENCIES"))
-    secDep:SetTextColor(C.accent[1] + 0.15, C.accent[2] + 0.15, C.accent[3] + 0.05)
-
-    local sepDepTitle = panel:CreateTexture(nil, "ARTWORK")
-    sepDepTitle:SetHeight(1)
-    sepDepTitle:SetPoint("TOPLEFT",  secDep, "BOTTOMLEFT", -2, -8)
-    sepDepTitle:SetPoint("TOPRIGHT", panel,  "TOPRIGHT",  -8,  0)
-    sepDepTitle:SetColorTexture(C.accentDim[1], C.accentDim[2], C.accentDim[3], 0.40)
-
-    -- Cadre sombre / bordure violette (même habillage que les listes).
-    -- Deux colonnes côte à côte : gauche = ViewerLog, droite = AltViewerLog.
-    -- Hauteur : 8 lignes à gauche (dont Infobulle) → 280.
+-- Construit la page Modules (cadre deux colonnes) dans `page`.
+-- Renvoie { Refresh } à appeler à l'affichage.
+function ns.UI.BuildDependenciesSection(page)
     local DEP_BOX_H   = 280
     local COL_RIGHT_X = 322
-    local depBox = ns.UI.StyledFrame(panel, panelWidth - 16, DEP_BOX_H)
-    depBox:SetPoint("TOPLEFT", sepDepTitle, "BOTTOMLEFT", 2, -10)
-    -- Ancre droite en plus de la gauche : la largeur suit celle du panneau
-    -- (redimensionnable, cf. ui/PanelResize.lua) au lieu de rester figée
-    -- sur panelWidth pris à la construction.
-    depBox:SetPoint("TOPRIGHT", sepDepTitle, "BOTTOMRIGHT", -2, -10)
+
+    local depBox = ns.UI.StyledFrame(page, nil, nil, "box")
+    depBox:SetPoint("TOPLEFT",  page, "TOPLEFT",  10, -10)
+    depBox:SetPoint("TOPRIGHT", page, "TOPRIGHT", -10, -10)
+    depBox:SetHeight(DEP_BOX_H)
 
     -- En-têtes de colonnes
     local hdrVL = depBox:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     hdrVL:SetPoint("TOPLEFT", depBox, "TOPLEFT", 12, -10)
     hdrVL:SetText(ns.L("SECTION_DEP_VL"))
-    hdrVL:SetTextColor(C.accent[1] + 0.2, C.accent[2] + 0.2, C.accent[3] + 0.1)
+    ns.UI.Tint(hdrVL, "accent")
 
     local hdrAVL = depBox:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     hdrAVL:SetPoint("TOPLEFT", depBox, "TOPLEFT", COL_RIGHT_X, -10)
     hdrAVL:SetText(ns.L("SECTION_DEP_AVL"))
-    hdrAVL:SetTextColor(C.accent[1] + 0.2, C.accent[2] + 0.2, C.accent[3] + 0.1)
+    ns.UI.Tint(hdrAVL, "accent")
 
     -- Séparateur vertical entre les deux colonnes
     local depVSep = depBox:CreateTexture(nil, "ARTWORK")
     depVSep:SetWidth(1)
     depVSep:SetPoint("TOPLEFT",    depBox, "TOPLEFT",    COL_RIGHT_X - 12, -6)
     depVSep:SetPoint("BOTTOMLEFT", depBox, "BOTTOMLEFT", COL_RIGHT_X - 12,  6)
-    depVSep:SetColorTexture(C.accentDim[1], C.accentDim[2], C.accentDim[3], 0.40)
+    ns.UI.Tint(depVSep, "accentDim", 0.80)
 
-    -- Ancres invisibles de tête pour chaque colonne (les lignes s'ancrent
-    -- au BOTTOMLEFT de la précédente).
+    -- Ancres de tête : chaque ligne s'ancre au BOTTOMLEFT de la précédente.
     local leftTopAnchor = CreateFrame("Frame", nil, depBox)
     leftTopAnchor:SetSize(1, 1)
     leftTopAnchor:SetPoint("TOPLEFT", depBox, "TOPLEFT", 12, -30)
@@ -170,8 +150,7 @@ function ns.UI.BuildDependenciesSection(panel, anchorAbove, panelWidth)
     rightTopAnchor:SetSize(1, 1)
     rightTopAnchor:SetPoint("TOPLEFT", depBox, "TOPLEFT", COL_RIGHT_X, -30)
 
-    -- Resynchronisation de la colonne droite après une bascule gauche
-    -- (déclarée avant les lignes gauche qui la référencent en callback).
+    -- Resynchronise la colonne droite après une bascule gauche.
     local depAVLRows
     local function RefreshAVLRows()
         if not depAVLRows then return end
@@ -183,7 +162,6 @@ function ns.UI.BuildDependenciesSection(panel, anchorAbove, panelWidth)
         end
     end
 
-    -- Colonne gauche (ViewerLog) — cascade/symétrie vers Alt.
     local depVLRows = {}
     local prevRow = leftTopAnchor
     for i, mod in ipairs(VL_MODULES) do
@@ -191,7 +169,6 @@ function ns.UI.BuildDependenciesSection(panel, anchorAbove, panelWidth)
         prevRow = depVLRows[i]
     end
 
-    -- Colonne droite (AltViewerLog) — indépendante.
     depAVLRows = {}
     prevRow = rightTopAnchor
     for i, mod in ipairs(AVL_MODULES) do
@@ -200,16 +177,14 @@ function ns.UI.BuildDependenciesSection(panel, anchorAbove, panelWidth)
     end
 
     local function Refresh()
-        -- Colonne gauche (ViewerLog)
         for i, mod in ipairs(VL_MODULES) do
             local cb = depVLRows[i]
             local installed = AddonExists(mod.vlName)
             ns.UI.SetCheckboxEnabled(cb, installed)
             cb:SetChecked(installed and AddonIsEnabled(mod.vlName))
         end
-        -- Colonne droite (AltViewerLog)
         RefreshAVLRows()
     end
 
-    return { bottomAnchor = depBox, Refresh = Refresh }
+    return { Refresh = Refresh }
 end
