@@ -9,8 +9,8 @@ local addonName, ns = ...
 -- EventReminder.lua ni écriture dans ViewerLogDB (lecture seule).
 
 local SETTING_KEY    = "disableMailReminder"
-local LEAD_MINUTES   = 30   -- seuil d'alerte avant expiration
-local LEAD_SECONDS   = LEAD_MINUTES * 60
+local LEAD_DAYS      = 7    -- seuil d'alerte avant expiration
+local LEAD_SECONDS   = LEAD_DAYS * 86400
 local CHECK_INTERVAL = 300  -- 5 min : l'expiration évolue lentement, pas besoin de plus court
 
 local _alertedAt = {}   -- [charKey] = expiresAt déjà signalé (évite le spam ; se redéclenche si nouvelle échéance)
