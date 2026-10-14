@@ -103,7 +103,7 @@ function ns.ScanEquipment()
         if itemID then
             local link = GetInventoryItemLink("player", slotID)
             if link then
-                local _, _, _, _, _, _, _, _, itemEquipLoc = GetItemInfo(link)
+                local _, _, _, itemEquipLoc = C_Item.GetItemInfoInstant(link)
                 local isDefinitelyInvalid = itemEquipLoc ~= nil
                     and (itemEquipLoc == "" or INVALID_EQUIP_LOC[itemEquipLoc])
 
