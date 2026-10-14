@@ -1,4 +1,4 @@
-## Interface: 120100
+## Interface: 120105
 ## Title: ViewerLog |cff9955ff[Infobulle]|r
 ## Notes: Infobulle d'objet ViewerLog : possession multi-personnages (sacs, banque, courrier, bataillon, guildes).
 ## Author: SoLoup_ever

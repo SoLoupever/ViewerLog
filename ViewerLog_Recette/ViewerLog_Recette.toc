@@ -1,4 +1,4 @@
-## Interface: 120100
+## Interface: 120105
 ## Title: ViewerLog |cff9955ff[Recettes]|r
 ## Notes: Scan des recettes de métier pour ViewerLog
 ## Author: SoLoup_ever

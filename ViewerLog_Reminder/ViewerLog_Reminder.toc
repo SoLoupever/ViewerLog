@@ -1,4 +1,4 @@
-## Interface: 120100
+## Interface: 120105
 ## Title: ViewerLog |cff9955ff[Rappels]|r
 ## Notes: Rappels de chat (événement calendrier / expiration courrier) pour ViewerLog
 ## Author: SoLoup_ever

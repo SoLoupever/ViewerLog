@@ -1,4 +1,4 @@
-## Interface: 120100
+## Interface: 120105
 ## Title: ViewerLog
 ## Notes: Gestionnaire d'inventaire multi-personnages avec infobulles enrichies
 ## Author: SoLoup_ever

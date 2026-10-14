@@ -1,4 +1,4 @@
-## Interface: 120100
+## Interface: 120105
 ## Title: ViewerLog |cff9955ff[Réputations]|r
 ## Notes: Scan des réputations pour ViewerLog
 ## Author: SoLoup_ever
