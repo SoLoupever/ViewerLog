@@ -9,4 +9,5 @@ pluginNs.RECIPE_DEFINITIONS["Enchantement"]["Burning Crusade"] = {
     { itemID = 257038, spellID = 1261340, decorID = 11373 },
     { itemID = 257037, spellID = 1261331, decorID = 11372 },
     { itemID = 257093, spellID = 1262828, decorID = 11431 },
+    { itemID = 265331, spellID = 1313520, decorID = 16754 },
 }

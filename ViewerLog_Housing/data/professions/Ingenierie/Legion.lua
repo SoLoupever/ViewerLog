@@ -8,4 +8,5 @@ pluginNs.RECIPE_DEFINITIONS["Ingénierie"] = pluginNs.RECIPE_DEFINITIONS["Ingén
 pluginNs.RECIPE_DEFINITIONS["Ingénierie"]["Legion"] = {
     { itemID = 258225, spellID = 1263338, decorID = 11911 },
     { itemID = 258226, spellID = 1263319, decorID = 11912 },
+    { itemID = 282144, spellID = 1313527, decorID = 28439 },
 }

@@ -12,4 +12,6 @@ pluginNs.RECIPE_DEFINITIONS["Calligraphie"]["Battle for Azeroth"] = {
     { itemID = 252401, spellID = 1260596, decorID = 9050 },
     { itemID = 252035, spellID = 1260583, decorID = 8983 },
     { itemID = 245499, spellID = 1260577, decorID = 1217 },
+    { itemID = 283321, spellID = 1315465, decorID = 28457 },
+
 }

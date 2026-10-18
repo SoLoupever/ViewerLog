@@ -20,4 +20,5 @@ pluginNs.RECIPE_DEFINITIONS["Calligraphie"]["Midnight"] = {
     { itemID = 262616, spellID = 1248623, decorID = 14641 },
     { itemID = 280752, spellID = 1296505, decorID = 26384 },
     { itemID = 280757, spellID = 1296506, decorID = 26380 },
+    { itemID = 282190, spellID = 1315433, decorID = 26015 },
 }

@@ -12,4 +12,5 @@ pluginNs.RECIPE_DEFINITIONS["Calligraphie"]["Legion"] = {
     { itemID = 247925, spellID = 1260730, decorID = 4039 },
     { itemID = 247918, spellID = 1260719, decorID = 4032 },
     { itemID = 245459, spellID = 1260704, decorID = 1308 },
+    { itemID = 282132, spellID = 1313522, decorID = 28433 },
 }

@@ -8,4 +8,5 @@ pluginNs.RECIPE_DEFINITIONS["Enchantement"] = pluginNs.RECIPE_DEFINITIONS["Encha
 pluginNs.RECIPE_DEFINITIONS["Enchantement"]["Legion"] = {
     { itemID = 247923, spellID = 1260700, decorID = 4037 },
     { itemID = 256681, spellID = 1262238, decorID = 11282 },
+    { itemID = 282140, spellID = 1313525, decorID = 28437 }
 }

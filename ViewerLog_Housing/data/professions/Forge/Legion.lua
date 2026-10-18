@@ -9,4 +9,5 @@ pluginNs.RECIPE_DEFINITIONS["Forge"]["Legion"] = {
     { itemID = 245408, spellID = 1260698, decorID = 1314 },
     { itemID = 247909, spellID = 1260695, decorID = 4023 },
     { itemID = 247922, spellID = 1260693, decorID = 4036 },
+    { itemID = 282124, spellID = 1313521, decorID = 28429 },
 }

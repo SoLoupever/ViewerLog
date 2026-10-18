@@ -8,4 +8,6 @@ pluginNs.RECIPE_DEFINITIONS["Couture"] = pluginNs.RECIPE_DEFINITIONS["Couture"] 
 pluginNs.RECIPE_DEFINITIONS["Couture"]["Classic"] = {
     { itemID = 246685, spellID = 1261695, decorID = 2452 },
     { itemID = 243336, spellID = 1261688, decorID = 1282 },
+    { itemID = 284246, spellID = 1315757, decorID = 26711 },
+
 }

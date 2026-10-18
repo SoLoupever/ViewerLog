@@ -9,4 +9,5 @@ pluginNs.RECIPE_DEFINITIONS["Ingénierie"]["Battle for Azeroth"] = {
     { itemID = 246486, spellID = 1260352, decorID = 2329 },
     { itemID = 246604, spellID = 1260349, decorID = 2436 },
     { itemID = 246500, spellID = 1260425, decorID = 2340 },
+    { itemID = 283291, spellID = 1315426, decorID = 28472 },
 }

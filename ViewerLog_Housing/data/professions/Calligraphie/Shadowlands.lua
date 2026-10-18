@@ -13,4 +13,6 @@ pluginNs.RECIPE_DEFINITIONS["Calligraphie"]["Shadowlands"] = {
     { itemID = 258245, spellID = 1263247, decorID = 11924 },
     { itemID = 258235, spellID = 1263272, decorID = 11917 },
     { itemID = 258242, spellID = 1263293, decorID = 11922 },
+    { itemID = 283301, spellID = 1315335, decorID = 28575 },
+    { itemID = 284504, spellID = 1316306, decorID = 28549 },
 }

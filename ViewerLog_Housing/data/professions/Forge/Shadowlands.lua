@@ -8,4 +8,5 @@ pluginNs.RECIPE_DEFINITIONS["Forge"] = pluginNs.RECIPE_DEFINITIONS["Forge"] or {
 pluginNs.RECIPE_DEFINITIONS["Forge"]["Shadowlands"] = {
     { itemID = 257049, spellID = 1261980, decorID = 11384 },
     { itemID = 257048, spellID = 1261982, decorID = 11383 },
+    { itemID = 283260, spellID = 1315292, decorID = 28574 },
 }

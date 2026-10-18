@@ -8,4 +8,5 @@ pluginNs.RECIPE_DEFINITIONS["Couture"] = pluginNs.RECIPE_DEFINITIONS["Couture"] 
 pluginNs.RECIPE_DEFINITIONS["Couture"]["Battle for Azeroth"] = {
     { itemID = 245418, spellID = 1260475, decorID = 1311 },
     { itemID = 243101, spellID = 1260458, decorID = 1168 },
+    { itemID = 283299, spellID = 1315445, decorID = 27609 },
 }
