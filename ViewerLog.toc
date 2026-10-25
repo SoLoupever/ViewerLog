@@ -21,14 +21,7 @@ core\Init.lua
 core\Events.lua
 
 ## ── SCANNERS ──────────────────────────────────────────────────────
-scanner\Container.lua
-scanner\Index.lua
-scanner\Character.lua
-scanner\Bags.lua
-scanner\Bank.lua
-scanner\WarbandBank.lua
-scanner\Mail.lua
-scanner\Auctions.lua
+scanner\Identity.lua
 
 ## ── API ───────────────────────────────────────────────────────────
 api\API.lua

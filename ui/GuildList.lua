@@ -53,8 +53,10 @@ function ns.UI.BuildGuildList(block, colX)
 
     local function Populate()
         local rows = {}
-        if ViewerLogDB.guilds then
-            for key, gData in pairs(ViewerLogDB.guilds) do
+        local getAll = _G.ViewerLogAPI.GetAllGuilds
+        local guilds = getAll and getAll()
+        if guilds then
+            for key, gData in pairs(guilds) do
                 if type(gData) == "table" then
                     rows[#rows + 1] = { key = key, data = gData }
                 end

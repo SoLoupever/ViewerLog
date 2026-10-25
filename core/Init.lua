@@ -9,15 +9,12 @@ _G.ViewerLogAPI = {}
 
 -- Version du contrat d'API publique (≠ version .toc). À incrémenter sur
 -- tout changement cassant de l'API ou du format ViewerLogDB.
-ns.API_VERSION = 1
+ns.API_VERSION = 2
 
 -- ── Clés réservées dans ViewerLogDB (non-realms) ────────────
 
 local RESERVED_KEYS = {
     settings                = true,
-    warbandBank             = true,
-    warbandGold             = true,
-    guilds                  = true,
     warbandCustomCategories = true,
     -- Héritées d'anciennes SavedVariables
     profFileIDs             = true,
@@ -25,9 +22,39 @@ local RESERVED_KEYS = {
     hiddenExpansions        = true,
     hiddenProfessions       = true,
     woodPanelEnabled        = true,
-    -- Module ViewerLog_Housing
-    housing                 = true,
+    -- Stockage par module (cf. ns.GetModuleData)
+    modules                 = true,
 }
+
+-- ── Migration : clés racines héritées → ViewerLogDB.modules[nom] ──
+-- string = table entière reprise telle quelle ; table = { champ = cléRacine }.
+local LEGACY_MODULE_KEYS = {
+    guild   = { guilds = "guilds", dedupVersion = "guildsDedupVersion" },
+    housing = "housing",
+    items   = { warbandBank = "warbandBank" },
+    monnaie = { warbandGold = "warbandGold" },
+}
+
+ViewerLogDB.modules = ViewerLogDB.modules or {}
+
+for name, legacy in pairs(LEGACY_MODULE_KEYS) do
+    local mods = ViewerLogDB.modules
+    if type(legacy) == "string" then
+        if ViewerLogDB[legacy] ~= nil then
+            if mods[name] == nil then mods[name] = ViewerLogDB[legacy] end
+            ViewerLogDB[legacy] = nil
+        end
+    else
+        for field, rootKey in pairs(legacy) do
+            local value = ViewerLogDB[rootKey]
+            if value ~= nil then
+                mods[name] = mods[name] or {}
+                if mods[name][field] == nil then mods[name][field] = value end
+                ViewerLogDB[rootKey] = nil
+            end
+        end
+    end
+end
 
 -- true si la clé est un royaume de joueurs.
 function ns.IsRealm(key, value)
@@ -62,9 +89,7 @@ SlashCmdList["VIEWERLOG"] = function(msg)
         if ns.OpenOptions then ns.OpenOptions() end
 
     elseif msg == "scan" then
-        ns.ScanBags("MANUAL")
-        ns.ScanBank()
-        ns.ScanWarbandBank()
+        if vlAPI and vlAPI.ScanItems then vlAPI.ScanItems() end
         if vlAPI and vlAPI.ScanBasicProfessions then vlAPI.ScanBasicProfessions() end
         print("|cff9955ff[ViewerLog]|r " .. ns.L("SLASH_SCAN_DONE"))
 

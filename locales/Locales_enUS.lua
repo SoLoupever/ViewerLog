@@ -70,6 +70,8 @@ ns.locales["enUS"] = {
     CB_MAIL_REMINDER        = "Mail expiration reminder",
     CB_MAIL_REMINDER_TIP    = "Chat message when a character's pending mail is getting close to expiring.\n|cffaaaaaa(Requires the ViewerLog_Reminder dependency.)|r",
 
+    DEP_ITEMS            = "Items |cffb45cff(ViewerLog_Items)|r",
+    DEP_CHARSTATE        = "Character state |cffb45cff(ViewerLog_CharState)|r",
     DEP_TOOLTIP          = "Tooltip |cffb45cff(ViewerLog_Tooltip)|r",
     DEP_GUILD            = "Guild |cff4a9eff(ViewerLog_Guild)|r",
     DEP_REPUT            = "Reputations |cffb45cff(ViewerLog_Reput)|r",

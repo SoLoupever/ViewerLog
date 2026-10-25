@@ -20,6 +20,8 @@ ns.UI = ns.UI or {}
 -- Monnaie et Recette n'ont PAS d'addon AltViewerLog_* dédié (la partie
 -- recettes vit dans AltViewerLog_Professions) → avlName = nil.
 local VL_MODULES = {
+    { vlName = "ViewerLog_Items",       avlName = nil,                        labelKey = "DEP_ITEMS"   },
+    { vlName = "ViewerLog_CharState",   avlName = nil,                        labelKey = "DEP_CHARSTATE" },
     { vlName = "ViewerLog_Tooltip",     avlName = nil,                        labelKey = "DEP_TOOLTIP" },
     { vlName = "ViewerLog_Guild",       avlName = "AltViewerLog_GuildeLog",   labelKey = "DEP_GUILD"   },
     { vlName = "ViewerLog_Reput",       avlName = "AltViewerLog_Reput",       labelKey = "DEP_REPUT"   },
@@ -115,8 +117,12 @@ end
 -- Construit la page Modules (cadre deux colonnes) dans `page`.
 -- Renvoie { Refresh } à appeler à l'affichage.
 function ns.UI.BuildDependenciesSection(page)
-    local DEP_BOX_H   = 280
-    local COL_RIGHT_X = 322
+    local ROW_H, ROW_GAP = 22, 8
+    local HEAD_H, PAD_B  = 30, 12
+    local COL_RIGHT_X    = 322
+    -- Hauteur calculée sur la colonne la plus longue
+    local rows      = math.max(#VL_MODULES, #AVL_MODULES)
+    local DEP_BOX_H = HEAD_H + rows * ROW_H + (rows - 1) * ROW_GAP + PAD_B
 
     local depBox = ns.UI.StyledFrame(page, nil, nil, "box")
     depBox:SetPoint("TOPLEFT",  page, "TOPLEFT",  10, -10)

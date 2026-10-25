@@ -72,6 +72,8 @@ ns.locales["frFR"] = {
     CB_MAIL_REMINDER        = "Rappel d'expiration du courrier",
     CB_MAIL_REMINDER_TIP    = "Message dans le chat quand le courrier en attente d'un personnage approche de son expiration.\n|cffaaaaaa(Nécessite la dépendance ViewerLog_Reminder.)|r",
 
+    DEP_ITEMS            = "Objets |cffb45cff(ViewerLog_Items)|r",
+    DEP_CHARSTATE        = "État du personnage |cffb45cff(ViewerLog_CharState)|r",
     DEP_TOOLTIP          = "Infobulle |cffb45cff(ViewerLog_Tooltip)|r",
     DEP_GUILD            = "Guilde |cff4a9eff(ViewerLog_Guild)|r",
     DEP_REPUT            = "Réputations |cffb45cff(ViewerLog_Reput)|r",
