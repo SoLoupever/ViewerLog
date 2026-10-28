@@ -6,6 +6,7 @@ local addonName, ns = ...
 ns.UI = ns.UI or {}
 
 local ROW_H = 22
+local GUILD_COLOR = "|cffffff88"
 
 -- block : conteneur ; colX : décalage X de la colonne droite.
 function ns.UI.BuildGuildList(block, colX)
@@ -69,8 +70,8 @@ function ns.UI.BuildGuildList(block, colX)
         for i, row in ipairs(rows) do
             local r, g = GetRow(i), row.data
             r.key, r.guildName = row.key, g.guildName
-            r.nm:SetText(string.format("|cffffff88%s|r |cff555555(%s)|r",
-                g.guildName or "?", g.realm or "?"))
+            r.nm:SetText(string.format("%s%s (%s)|r",
+                GUILD_COLOR, g.guildName or "?", g.realm or "?"))
             r:Show()
         end
         for i = #rows + 1, #pool do pool[i]:Hide() end

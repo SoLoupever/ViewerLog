@@ -24,6 +24,12 @@ local RESERVED_KEYS = {
     woodPanelEnabled        = true,
     -- Stockage par module (cf. ns.GetModuleData)
     modules                 = true,
+    -- Anciennes clés racine des modules (jamais des royaumes)
+    guilds                  = true,
+    guildsDedupVersion      = true,
+    housing                 = true,
+    warbandBank             = true,
+    warbandGold             = true,
 }
 
 -- ── Migration : clés racines héritées → ViewerLogDB.modules[nom] ──
