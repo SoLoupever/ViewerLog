@@ -23,7 +23,9 @@ end
 -- Lecture seule de ViewerLogDB.settings, pour les dépendances qui n'ont
 -- pas accès direct à ViewerLogDB (ex: flags "disableXxx" de ViewerLog_Reminder).
 function ns.GetSetting(key)
-    return ViewerLogDB.settings and ViewerLogDB.settings[key]
+    local v = ViewerLogDB.settings and ViewerLogDB.settings[key]
+    if v == nil then return ns.SETTING_DEFAULTS[key] end
+    return v
 end
 
 -- ── Stockage par module ───────────────────────────────────────────

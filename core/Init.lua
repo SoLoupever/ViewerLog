@@ -11,6 +11,11 @@ _G.ViewerLogAPI = {}
 -- tout changement cassant de l'API ou du format ViewerLogDB.
 ns.API_VERSION = 2
 
+-- Valeurs par défaut des réglages (source unique, lue par GetSetting).
+ns.SETTING_DEFAULTS = {
+    tooltipCharLimit = 5,
+}
+
 -- ── Clés réservées dans ViewerLogDB (non-realms) ────────────
 
 local RESERVED_KEYS = {

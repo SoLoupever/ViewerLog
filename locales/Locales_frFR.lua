@@ -13,6 +13,7 @@ ns.locales["frFR"] = {
     TT_WARBAND  = "Bataillon",
     TT_GUILD    = "Guilde",
     TT_TOTAL    = "Total",
+    TT_MORE     = "+%d de plus",
 
     -- ── Commandes slash /vl ──────────────────────────────────────
     SLASH_SCAN_DONE          = "Scan inventaire effectué.",
@@ -55,6 +56,9 @@ ns.locales["frFR"] = {
     CB_SHOW_WARBAND_TIP    = "Affiche la ligne Bataillon dans les infobulles.",
     CB_SHOW_REALM          = "Le royaume",
     CB_SHOW_REALM_TIP      = "Affiche le royaume à côté du nom des personnages dans les infobulles.",
+
+    TT_OPT_LIMIT           = "Personnages affichés",
+    TT_OPT_LIMIT_TIP       = "Nombre maximum de personnages listés dans l'infobulle des objets.\n|cffaaaaaa(Maj + clic : pas de 5.)|r",
 
     SECTION_REMINDERS  = "RAPPELS",
     SECTION_CHARACTERS = "PERSONNAGES",

@@ -32,10 +32,12 @@ ui\themes\Hybrid.lua
 ui\themes\Blizzard.lua
 ui\ScrollBarSkin.lua
 ui\Widgets.lua
+ui\Stepper.lua
 ui\PanelResize.lua
 ui\Tabs.lua
 ui\DiscordButton.lua
 ui\TooltipPreview.lua
+ui\TooltipOptions.lua
 ui\TooltipSection.lua
 ui\RemindersSection.lua
 ui\Dependencies.lua

@@ -23,7 +23,7 @@ function ns.UI.BuildTooltipSection(page)
     block:SetPoint("TOPRIGHT", page, "TOPRIGHT", 0, 0)
     block:SetHeight(BLOCK_H)
 
-    local preview
+    local preview, opts
 
     -- Carte : titre, description, case à cocher on/off (à droite).
     local card = ns.UI.StyledFrame(block, nil, nil, "card")
@@ -47,6 +47,7 @@ function ns.UI.BuildTooltipSection(page)
         local enabled = not S("disableTooltip")
         for _, cb in ipairs(cbs) do ns.UI.SetCheckboxEnabled(cb, enabled) end
         preview:SetAlpha(enabled and 1 or 0.35)
+        opts.Update()
     end
 
     cbMain = ns.UI.Checkbox(card, "", ns.L("CB_TOOLTIP_ENABLED_TIP"), card, 0, 0,
@@ -70,10 +71,12 @@ function ns.UI.BuildTooltipSection(page)
     end
 
     preview = ns.UI.BuildTooltipPreview(block, card, 0, -16, PREVIEW_W, PREVIEW_H)
+    opts    = ns.UI.BuildTooltipOptions(block, preview, PREVIEW_W)
 
     local function Refresh()
         cbMain:SetChecked(not S("disableTooltip"))
         for i, o in ipairs(OPTIONS) do cbs[i]:SetChecked(not S(o.key)) end
+        opts.Refresh()
         UpdateDependents()
         preview.Refresh()
     end

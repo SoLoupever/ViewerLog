@@ -11,6 +11,7 @@ ns.locales["enUS"] = {
     TT_WARBAND  = "Warband",
     TT_GUILD    = "Guild",
     TT_TOTAL    = "Total",
+    TT_MORE     = "+%d more",
 
     -- ── /vl slash commands ───────────────────────────────────────
     SLASH_SCAN_DONE          = "Inventory scan complete.",
@@ -53,6 +54,9 @@ ns.locales["enUS"] = {
     CB_SHOW_WARBAND_TIP    = "Shows the Warband line in tooltips.",
     CB_SHOW_REALM          = "Realm",
     CB_SHOW_REALM_TIP      = "Shows the realm next to character names in tooltips.",
+
+    TT_OPT_LIMIT           = "Characters shown",
+    TT_OPT_LIMIT_TIP       = "Maximum number of characters listed in item tooltips.\n|cffaaaaaa(Shift-click: steps of 5.)|r",
 
     SECTION_REMINDERS  = "REMINDERS",
     SECTION_CHARACTERS = "CHARACTERS",

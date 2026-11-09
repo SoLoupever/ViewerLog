@@ -17,7 +17,9 @@ local CHECK_TEX = "Interface\\Buttons\\UI-CheckBox-Check"
 
 -- ── Réglages (registre unique : ViewerLogDB.settings) ───────
 function ns.UI.GetSetting(key)
-    return (ViewerLogDB.settings or {})[key]
+    local v = (ViewerLogDB.settings or {})[key]
+    if v == nil then return ns.SETTING_DEFAULTS[key] end
+    return v
 end
 
 function ns.UI.SetSetting(key, val)
